@@ -13,6 +13,7 @@ if not GEMINI_API_KEY:
     raise ValueError("Please set your GEMINI_API_KEY in the .env file or as an environment variable.")
 
 genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 audio_queue = queue.Queue()
 recording = True
@@ -57,8 +58,8 @@ def transcribe_audio(audio_data):
 def get_ai_response(text):
     """Gets AI-generated response based on transcribed text using Gemini API."""
     try:
-        response = genai.generate_text(model="gemini-1.5-flash", prompt=text)
-        return response.result.strip()
+        response = model.generate_content(text)
+        return response.text.strip()
     except Exception as e:
         return f"Error generating response: {e}"
 
